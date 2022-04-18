@@ -4,8 +4,15 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    CurlDomainConfig: typeof import('./src/components/CurlDomainConfig.vue')['default']
-    CurlLocalRequest: typeof import('./src/components/CurlLocalRequest.vue')['default']
+      AceEditor: typeof import('./src/components/ace/AceEditor.vue')['default']
+      AceEditorOption: typeof import('./src/components/ace/AceEditorOption.vue')['default']
+      CurlDomainConfig: typeof import('./src/components/CurlDomainConfig.vue')['default']
+      CurlLocalRequest: typeof import('./src/components/CurlLocalRequest/CurlLocalRequest.vue')['default']
+      RequestHeader: typeof import('./src/components/CurlLocalRequest/response/RequestHeader.vue')['default']
+      Response: typeof import('./src/components/CurlLocalRequest/response/Response.vue')['default']
+      ResponseBody: typeof import('./src/components/CurlLocalRequest/response/ResponseBody.vue')['default']
+      ResponseBodyTip: typeof import('./src/components/CurlLocalRequest/response/ResponseBodyTip.vue')['default']
+      ResponseHeader: typeof import('./src/components/CurlLocalRequest/response/ResponseHeader.vue')['default']
   }
 }
 

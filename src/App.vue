@@ -4,7 +4,7 @@
 
 <script>
 
-import CurlLocalRequest from "@/components/CurlLocalRequest";
+import CurlLocalRequest from "@/components/CurlLocalRequest/CurlLocalRequest";
 
 export default {
   name: 'App',
@@ -12,6 +12,8 @@ export default {
     CurlLocalRequest
   }
 }
+
+
 </script>
 
 <style>

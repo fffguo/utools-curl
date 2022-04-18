@@ -4,14 +4,14 @@
 	"logo": "logo.png",
 	"features": [
 		{
-			"code": "curl_local_debug",
-			"explain": "快速替换本地域名并请求,方便debug解决问题",
-			"cmds": [
-				{
-					"type": "over",
-					"label": "curl"
-				}
-			]
-		}
+          "code": "curl_local_request",
+          "explain": "快速替换本地域名并请求,方便debug解决问题",
+          "cmds": [
+            {
+              "type": "over",
+              "label": "curl"
+            }
+          ]
+        }
 	]
 }
