@@ -1,11 +1,15 @@
 import {createApp} from 'vue'
 import App from './App.vue'
+//elementPlus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+//ace编辑器
 import Ace from 'ace-builds'
+//vuex
+import store from './../store/index'
+// iconfont
 import * as IconFont from './assets/iconfont/iconfont'
 import './assets/iconfont/iconfont.css'
-import store from './../store/index'
 
 const app = createApp(App)
 

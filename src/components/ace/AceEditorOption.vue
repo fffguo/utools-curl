@@ -32,6 +32,12 @@
       </svg>
       搜索
     </div>
+    <div v-show="showReplaceButton" class="optionButton" v-on:click="replaceBody">
+      <svg aria-hidden="true" class="icon">
+        <use xlink:href="#icon-tihuantupian"></use>
+      </svg>
+      替换
+    </div>
   </div>
 </template>
 
@@ -43,28 +49,33 @@ export default {
   name: "AceEditorOption",
   data: function () {
     return {
-      contentType: ""
+      contentType: "",
     }
   },
   props: {
-    aceEditor: Object
+    aceEditor: Object,
+    showReplaceButton: Boolean,
+    contextText: String,
   },
   methods: {
     revertBody: function () {
-      this.props.editor.setValue(this.$store.state.curl.response.body, 1)
+      this.aceEditor.setValue(this.contextText, 1)
     },
     beautifyBody: function () {
-      this.props.aceEditor.setValue(pd.json(this.$store.state.curl.response.body), 1)
+      this.aceEditor.setValue(pd.json(this.contextText), 1)
     },
     copyBody: function () {
-      window.utools.copyText(this.props.aceEditor.getValue())
+      window.utools.copyText(this.aceEditor.getValue())
       ElMessage({
         message: '复制成功',
         type: 'success',
       })
     },
     searchBody: function () {
-      this.props.aceEditor.execCommand('find');
+      this.aceEditor.execCommand('find');
+    },
+    replaceBody: function () {
+      this.aceEditor.execCommand('replace');
     },
   }
 }

@@ -1,7 +1,7 @@
 <template>
-  <el-descriptions border column="1" size="small">
+  <el-descriptions :column=1 border size="small">
     <el-descriptions-item
-        v-for="(value,key) in this.$store.state.curl.response.headers"
+        v-for="(value,key) in this.headers"
         :key="key"
         :label="`${key+':'}`"
         align="left"
@@ -13,7 +13,10 @@
 
 <script>
 export default {
-  name: "ResponseHeader"
+  name: "HeaderComponent",
+  props: {
+    headers: Object
+  },
 }
 </script>
 

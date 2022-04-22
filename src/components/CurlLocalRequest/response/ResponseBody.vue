@@ -1,14 +1,14 @@
 <template>
-
-  <el-tab-pane label="返回结果">
+  <div>
     <ResponseBodyTip/>
-    <AceEditor :source="source"/>
-  </el-tab-pane>
+    <AceEditor :read-only="true" editorName="responseBodyEditor"/>
+  </div>
 </template>
 
 <script>
-import ResponseBodyTip from './ResponseBodyTip'
-import AceEditor from './../../ace/AceEditor'
+import ResponseBodyTip from '@/components/CurlLocalRequest/response/ResponseBodyTip'
+import AceEditor from '@/components/ace/AceEditor'
+
 
 export default {
   name: "ResponseBody",
@@ -17,9 +17,7 @@ export default {
     AceEditor,
   },
   data() {
-    return {
-      source: 'body',
-    }
+    return {}
   },
 }
 </script>

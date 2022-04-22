@@ -8,11 +8,19 @@ declare module 'vue' {
       AceEditorOption: typeof import('./src/components/ace/AceEditorOption.vue')['default']
       CurlDomainConfig: typeof import('./src/components/CurlDomainConfig.vue')['default']
       CurlLocalRequest: typeof import('./src/components/CurlLocalRequest/CurlLocalRequest.vue')['default']
-      RequestHeader: typeof import('./src/components/CurlLocalRequest/response/RequestHeader.vue')['default']
+      ElButton: typeof import('element-plus/es')['ElButton']
+      ElCard: typeof import('element-plus/es')['ElCard']
+      ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
+      ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
+      ElInput: typeof import('element-plus/es')['ElInput']
+      ElOption: typeof import('element-plus/es')['ElOption']
+      ElSelect: typeof import('element-plus/es')['ElSelect']
+      ElTabPane: typeof import('element-plus/es')['ElTabPane']
+      ElTabs: typeof import('element-plus/es')['ElTabs']
+      Header: typeof import('./src/components/CurlLocalRequest/response/Header.vue')['default']
       Response: typeof import('./src/components/CurlLocalRequest/response/Response.vue')['default']
       ResponseBody: typeof import('./src/components/CurlLocalRequest/response/ResponseBody.vue')['default']
       ResponseBodyTip: typeof import('./src/components/CurlLocalRequest/response/ResponseBodyTip.vue')['default']
-      ResponseHeader: typeof import('./src/components/CurlLocalRequest/response/ResponseHeader.vue')['default']
   }
 }
 

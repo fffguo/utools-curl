@@ -1,25 +1,24 @@
 <template>
   <div>
-    <el-input v-model="this.$store.state.curl.curlText" :rows="5" type="textarea"/>
-    <el-button size="large" type="primary" v-on:click="sendRequest">发送</el-button>
-    <el-button size="large" type="primary" v-on:click="refresh">刷新</el-button>
+    <!--  <el-card>-->
+    <Request/>
+    <el-divider/>
+    <Response v-show="getResponseShow"/>
     <!--  </el-card>-->
-    <!--    <el-divider/>-->
-    <Response v-show="response.show"/>
   </div>
-
 </template>
 <script>
 
-import Response from "@/components/CurlLocalRequest/response/Response";
-import {pd} from "pretty-data";
 
-const CURLParser = require('parse-curl')
+import Request from "@/components/CurlLocalRequest/request/Request";
+import Response from "@/components/CurlLocalRequest/response/Response";
+
 
 export default {
-  name: 'HelloWorld',
+  name: 'CurlLocalRequest',
   components: {
-    Response
+    Request,
+    Response,
   },
   props: {
     msg: String
@@ -32,51 +31,42 @@ export default {
       },
     }
   },
-  methods: {
-    refresh: function () {
-      window.location.reload()
-    },
-    //发送请求
-    sendRequest: function () {
-      let _this = this
-
-      let curl = CURLParser(_this.$store.state.curl.curlText);
-      console.log(curl)
-      //构造参数
-      let args = {
-        "url": curl.url,
-        "method": curl.method,
-        "headers": curl.header,
-        "body": curl.body
-      }
-      _this.$store.state.curl.request.headers = curl.header
-      //发送
-      window.sendRequest(args, function (response) {
-
-        //response header
-        _this.$store.state.curl.response.headers = response.headers
-        //请求结束
-        let body = ""
-        response.on('end', () => {
-          _this.$store.state.curl.response.body = body
-          _this.$store.state.ace.bodyEdit.setValue(pd.json(body), 1)
-          _this.$store.state.ace.bodyEdit.getSession().setMode("ace/mode/json5")
-        })
-        //返回体,body过大会多次回调
-        response.on('data', (data) => {
-          body += data.toString();
-        })
-        //失败
-        response.on('error', error => {
-          _this.$store.state.curl.response.body = error.toString()
-          _this.$store.state.ace.bodyEdit.setValue(error.toString(), 1)
-          _this.$store.state.ace.bodyEdit.getSession().setMode("ace/mode/text")
-        })
-
-      })
-    },
-
+  computed: {
+    getResponseShow() {
+      return this.$store.state.dom.response.show
+    }
   },
+
+  methods: {},
+  mounted() {
+    window.utools.onPluginEnter(({code, type, payload}) => {
+      console.log('用户进入插件', code, type, payload)
+      this.$store.state.curl.curlText = `curl 'http://d2p-api.1000.com.test0.ck/order/list/v2/2?a=1&b' \\
+  -H 'Accept: application/json' \\
+  -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' \\
+  -H 'Connection: keep-alive' \\
+  -H 'Content-Type: application/json' \\
+  -H 'Cookie: _ga=GA1.3.849729764.1643264200; _gid=GA1.3.1328065796.1650332276; gauserid=qm33593oog; SSOTICKET=; SSOEXPIRES=; SSOTHRESHOLD=; qmuid=-1896553836; cxuid=1890023; a9a68f4fefd3b693f10be4a89799dc48=d8e87cedb0ff4c83931c2635807d0b88; _gat=1' \\
+  -H 'Origin: http://web.1000.com.test0.ck' \\
+  -H 'Platform: pc' \\
+  -H 'Platform-No: ' \\
+  -H 'Referer: http://web.1000.com.test0.ck/' \\
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36 Edg/100.0.1185.44' \\
+  -H 'reqId: f9359ab0-c135-11ec-b566-03eae73dc763' \\
+  -H 'systemId: 0033' \\
+  --data-raw '{"filter":{"orderStatues":"","payType":"","payStatus":""},"pageNo":0,"pageSize":10,"selfTakeStatus":"","orderPlatformFlag":"0"}' \\
+  --compressed \\
+  --insecure`
+
+      //初始化
+      this.$store.commit('initByCurlText', this.$store.state.curl.curlText)
+      //发送
+      this.$store.commit('sendRequest')
+
+    });
+
+
+  }
 
 }
 
@@ -84,10 +74,5 @@ export default {
 </script>
 
 <style scoped>
-template {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 
 </style>

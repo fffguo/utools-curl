@@ -1,37 +1,42 @@
 <template>
-  <el-card class="box-card">
-    <el-tabs class="demo-tabs">
-      <el-tab-pane label="返回结果">
-        <ResponseBody/>
-      </el-tab-pane>
-      <el-tab-pane label="返回头部" name="returnHeader">
-        <ResponseHeader/>
-      </el-tab-pane>
-      <el-tab-pane label="请求头部" name="requestHeader">
-        <RequestHeader/>
-      </el-tab-pane>
-    </el-tabs>
-  </el-card>
+  <el-tabs v-model="getActiveTabName" class="demo-tabs" type="border-card">
+    <el-tab-pane label="返回结果" name="responseResult">
+      <ResponseBody/>
+    </el-tab-pane>
+    <el-tab-pane label="返回头部" name="responseHeader">
+      <Header :headers="getResponseHeaders"/>
+    </el-tab-pane>
+    <el-tab-pane label="请求头部" name="requestHeader">
+      <Header :headers="getRequestHeaders"/>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
-import RequestHeader from './RequestHeader'
-import ResponseHeader from './ResponseHeader'
-import ResponseBody from './ResponseBody'
+import Header from '@/components/CurlLocalRequest/response/Header'
+import ResponseBody from '@/components/CurlLocalRequest/response/ResponseBody'
 
 export default {
-  name: "ResponseHeader",
-  props: {
-    response: {
-      type: Object,
-      default: () => ({})
-    }
-  },
+
+  name: "ResponseComponent",
   components: {
-    RequestHeader,
-    ResponseHeader,
+    Header,
     ResponseBody,
   },
+  data() {
+  },
+  computed: {
+    getRequestHeaders() {
+      return this.$store.state.curl.request.headers
+    },
+    getResponseHeaders() {
+      return this.$store.state.curl.response.headers
+    },
+    getActiveTabName() {
+      return this.$store.state.dom.response.activeTabName
+    },
+  },
+  methods: {}
 }
 </script>
 

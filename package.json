@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "element-plus": "^2.1.7",
+    "element-plus": "^2.1.10",
     "parse-curl": "git+https://github.com/fffguo/parse-curl.js.git",
     "pretty-data": "^0.40.0",
     "vue": "^3.2.13",
@@ -24,8 +24,7 @@
     "ace-builds": "^1.4.14",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "unplugin-auto-import": "^0.6.8",
-    "unplugin-vue-components": "^0.18.5",
+    "unplugin-element-plus": "^0.4.0",
     "utools-api-types": "^2.6.0"
   },
   "eslintConfig": {
