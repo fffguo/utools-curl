@@ -18,5 +18,3 @@ app.use(ElementPlus)
     .use(Ace)
     .use(store)
     .mount('#app')
-
-

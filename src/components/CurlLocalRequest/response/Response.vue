@@ -23,8 +23,6 @@ export default {
     Header,
     ResponseBody,
   },
-  data() {
-  },
   computed: {
     getRequestHeaders() {
       return this.$store.state.curl.request.headers

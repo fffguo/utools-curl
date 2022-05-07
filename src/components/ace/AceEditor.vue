@@ -1,6 +1,9 @@
 <template>
   <div class="editor">
-    <AceEditorOption :aceEditor="aceEditor" :context-text="contentText" :show-replace-button="!readOnly"/>
+    <AceEditorOption :aceEditor="aceEditor"
+                     :context-text="contentText"
+                     :show-replace-button="!readOnly"
+                     :show-revert-button="readOnly"/>
     <div ref="ace" class="ace-editor">
     </div>
     <!--    <el-backtop :right="50" :bottom="50" />-->
@@ -13,13 +16,14 @@
 import ace from 'ace-builds'
 // ace主题
 import 'ace-builds/src-noconflict/theme-kuroir'
+// ace 检索框
+import 'ace-builds/src-noconflict/ext-searchbox'
 // ace 文本格式
 import 'ace-builds/src-noconflict/mode-json5'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/mode-text'
-// ace 检索框
-import 'ace-builds/src-noconflict/ext-searchbox'
-import AceEditorOption from './AceEditorOption'
+
+import AceEditorOption from '@/components/ace/AceEditorOption'
 
 export default {
   name: "ResponseBody",
@@ -33,12 +37,7 @@ export default {
   },
   data: function () {
     return {
-      aceEditor: null,
-      supportedLanguage: {
-        json: "ace/mode/json5",
-        xml: "ace/mode/xml",
-        text: "ace/mode/text",
-      }
+      aceEditor: null
     }
   },
   mounted() {
@@ -48,7 +47,8 @@ export default {
       minLines: 5, // 最小行数，还未到最大行数时，编辑器会自动伸缩大小
       fontSize: 14, // 编辑器内字体大小
       theme: 'ace/theme/kuroir', // 默认设置的主题
-      mode: this.supportedLanguage.json, // 默认设置的语言模式
+
+      mode: this.$store.state.ace.supportedLanguage.json, // 默认设置的语言模式
       tabSize: 4,// 制表符设置为 4 个空格大小
       readOnly: this.readOnly //只读
     })

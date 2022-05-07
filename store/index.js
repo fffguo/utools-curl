@@ -23,6 +23,11 @@ export default createStore({
         },
         //ace编辑器
         ace: {
+            supportedLanguage: {
+                json: "ace/mode/json5",
+                xml: "ace/mode/xml",
+                text: "ace/mode/text",
+            },
             responseBodyEditor: undefined,
             requestBodyEditor: undefined
         },

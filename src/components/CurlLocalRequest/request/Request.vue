@@ -30,9 +30,6 @@ export default {
     TableArgs,
     RequestBody
   },
-  data() {
-    return {}
-  },
   methods: {},
   computed: {
     getActiveTabName() {

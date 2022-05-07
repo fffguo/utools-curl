@@ -74,5 +74,29 @@ export default {
 </script>
 
 <style scoped>
+.ace_editor.fullScreen {
+  height: auto;
+  width: auto;
+  border: 0;
+  margin: 0;
+  position: fixed !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
 
+.fullScreen {
+  overflow: hidden;
+  background-color: red;
+}
+
+.ace_editor {
+  position: relative !important;
+  border: 1px solid lightgray;
+  margin: auto;
+  height: 200px;
+  width: 80%;
+}
 </style>

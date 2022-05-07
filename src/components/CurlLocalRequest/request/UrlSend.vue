@@ -27,8 +27,6 @@
 
 export default {
   name: "UrlComponent",
-  data() {
-  },
   computed: {
     loading: function () {
       return this.$store.state.dom.loading;
