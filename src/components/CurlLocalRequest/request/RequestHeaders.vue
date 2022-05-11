@@ -25,7 +25,7 @@
 import {ref} from "vue";
 
 export default {
-  name: "TableArgs",
+  name: "RequestHeaders",
   props: {
     tableDataList: {
       type: Array,

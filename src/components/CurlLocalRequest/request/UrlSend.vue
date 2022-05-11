@@ -47,6 +47,10 @@ export default {
 
 <style scoped>
 
+#urlSend {
+  margin-bottom: 20px;
+}
+
 .requestTypeStyle {
   width: 115px;
   margin-left: 20px;

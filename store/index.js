@@ -36,7 +36,8 @@ export default createStore({
             loading: false,
             request: {
                 startInit: false,
-                activeTabName: "requestBody"
+                activeTabName: "requestBody",
+                urlArgs: []
             },
             response: {
                 show: false,
@@ -107,9 +108,8 @@ export default createStore({
                     state.ace.responseBodyEditor.getSession().setMode("ace/mode/text")
                 })
             })
-            //todo 挂载
-            window.curl = state.curl
-            window.aceEdit = state.ace.responseBodyEditor
+            // 挂载
+            window.curlVuex = state
         },
 
         //取消发送请求
@@ -120,7 +120,6 @@ export default createStore({
             state.ace.responseBodyEditor.setValue("", 1)
             state.ace.responseBodyEditor.getSession().setMode("ace/mode/json5")
         },
-
     },
     actions: {},
     getters: {},
