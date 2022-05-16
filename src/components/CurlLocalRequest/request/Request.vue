@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <UrlSend/>
+    <UrlSend ref="urlSendRef" @parentHandle="refreshArgs"/>
     <el-tabs v-model="getActiveTabName" class="demo-tabs" type="border-card">
 
       <el-tab-pane label="请求头部" name="requestHeader">
@@ -10,7 +10,7 @@
         <RequestBody/>
       </el-tab-pane>
       <el-tab-pane label="URL参数" name="requestUrl">
-        <UlrArgs/>
+        <UlrArgs ref="urlArgsRef" @parentHandle="refreshUrl"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -32,7 +32,14 @@ export default {
     RequestBody,
     UlrArgs,
   },
-  methods: {},
+  methods: {
+    refreshArgs(url) {
+      this.$refs.urlArgsRef.refreshArgs(url);
+    },
+    refreshUrl(selection) {
+      this.$refs.urlSendRef.refreshUrl(selection);
+    },
+  },
   computed: {
     getActiveTabName() {
       return this.$store.state.dom.request.activeTabName

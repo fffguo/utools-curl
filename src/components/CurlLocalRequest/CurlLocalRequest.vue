@@ -2,7 +2,7 @@
   <div>
     <!--  <el-card>-->
     <Request/>
-    <el-divider/>
+    <el-divider id="divider"/>
     <Response v-show="getResponseShow"/>
     <!--  </el-card>-->
   </div>
@@ -98,5 +98,10 @@ export default {
   margin: auto;
   height: 200px;
   width: 80%;
+}
+
+#divider {
+  margin: 15px;
+  border: 0;
 }
 </style>
