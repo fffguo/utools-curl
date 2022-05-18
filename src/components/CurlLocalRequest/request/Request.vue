@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <UrlSend ref="urlSendRef" @parentHandle="refreshArgs"/>
+    <UrlSend ref="urlSendRef" @refreshArgs="refreshArgs"/>
     <el-tabs v-model="getActiveTabName" class="demo-tabs" type="border-card">
 
       <el-tab-pane label="请求头部" name="requestHeader">
@@ -10,7 +10,10 @@
         <RequestBody/>
       </el-tab-pane>
       <el-tab-pane label="URL参数" name="requestUrl">
-        <UlrArgs ref="urlArgsRef" @parentHandle="refreshUrl"/>
+        <UlrArgs ref="urlArgsRef"
+                 @addUrlKey="addUrlKey"
+                 @changeUrlArg="changeUrlArg"
+                 @refreshUrl="refreshUrl"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -38,6 +41,12 @@ export default {
     },
     refreshUrl(selection) {
       this.$refs.urlSendRef.refreshUrl(selection);
+    },
+    addUrlKey(key) {
+      this.$refs.urlSendRef.addUrlArg(key);
+    },
+    changeUrlArg(oldKey, newKey, oldValue, newValue, index) {
+      this.$refs.urlSendRef.changeUrlArg(oldKey, newKey, oldValue, newValue, index);
     },
   },
   computed: {

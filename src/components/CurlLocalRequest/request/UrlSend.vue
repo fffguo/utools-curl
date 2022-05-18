@@ -1,7 +1,8 @@
 <template>
 
   <div id="urlSend">
-    <el-input v-model="requestUrl"
+    <el-input v-model="this.$store.state.curl.request.url"
+              v-on:focus="this.oldUrl = this.$store.state.curl.request.url"
               class="input-with-select"
               placeholder="请输入测试地址~"
               @input="urlChange"
@@ -37,13 +38,10 @@ export default {
     startInit: function () {
       return this.$store.state.dom.request.startInit;
     },
-    requestUrl: function () {
-      return this.$store.state.curl.request.url;
-    },
   },
   data: function () {
     return {
-      url: "",
+      oldUrl: "",
     }
   },
   watch: {
@@ -65,6 +63,7 @@ export default {
     },
     //刷新url
     refreshUrl(selection) {
+      console.log("selection", selection)
       let argString = selection.map(arg => {
         if (arg !== undefined) {
           return arg.key + "=" + (arg.value === undefined ? "" : arg.value);
@@ -75,17 +74,42 @@ export default {
       let pattern = /[^?]+$/
       let url = this.$store.state.curl.request.url;
       if (pattern.test(url)) {
-        console.log("replace", argString, url, url.replace(/[^?]+$/, argString));
         this.$store.state.curl.request.url = url.replace(/[^?]+$/, argString)
       } else {
-        let mark = url.indexOf('?') === -1 ? "?" : ""
+        let mark = url.endsWith('?') === -1 ? "?" : ""
         this.$store.state.curl.request.url = url + mark + argString
       }
     },
-
+    //增加参数
+    addUrlArg(key) {
+      let url = this.$store.state.curl.request.url;
+      if (url.indexOf('?') === -1) {
+        //无问号
+        this.$store.state.curl.request.url = url + "?" + key + "=";
+      } else {
+        //有问号
+        let mark = !url.endsWith('?') && !url.endsWith('&') ? "&" : "";
+        this.$store.state.curl.request.url = url + mark + key + "=";
+      }
+    },
+    //更新url参数
+    changeUrlArg(oldKey, newKey, oldValue, newValue, index) {
+      let pattern = /[^?]+$/
+      let url = this.$store.state.curl.request.url;
+      let args = pattern.exec(url);
+      let newArgs = args.toString().split("&").map((arg, _index) => {
+        if (index === _index) {
+          return newKey + "=" + newValue
+        }
+        return arg
+      }).join("&")
+      this.$store.state.curl.request.url = url.replace(pattern, newArgs)
+    },
+    //url变更
     urlChange: function (newUrl) {
-      this.$store.state.curl.request.url = newUrl
-      this.$emit("parentHandle", newUrl)
+      if (this.oldUrl !== `${newUrl}=`) {
+        this.$emit("refreshArgs", newUrl)
+      }
     },
   }
 }
