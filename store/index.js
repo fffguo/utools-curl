@@ -140,10 +140,6 @@ export default createStore({
                     state.ace.responseBodyEditor.setValue(result.body, 1)
                     state.ace.responseBodyEditor.getSession().setMode(result.mode)
                     state.ace.responseBodyContentType = result.contentType
-                    ElMessage({
-                        message: '发送成功~',
-                        type: 'success',
-                    })
                 })
                 //返回体,body过大会多次回调
                 response.on('data', (data) => {
