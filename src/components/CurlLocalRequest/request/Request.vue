@@ -36,8 +36,8 @@ export default {
     UlrArgs,
   },
   methods: {
-    refreshArgs(url) {
-      this.$refs.urlArgsRef.refreshArgs(url);
+    refreshArgs(oldUrl, newUrl) {
+      this.$refs.urlArgsRef.refreshArgs(oldUrl, newUrl);
     },
     refreshUrl(selection) {
       this.$refs.urlSendRef.refreshUrl(selection);

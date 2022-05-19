@@ -1,7 +1,6 @@
 import {createStore} from 'vuex'
 import {pd} from "pretty-data";
-
-const CURLParser = require('parse-curl')
+import {ElMessage} from "element-plus";
 
 function parseBody(body) {
     let result = {
@@ -34,12 +33,14 @@ export default createStore({
             curlText: "",
             request: {
                 url: "",
-                method: "",
+                initUrl: "",//原始url
+                method: "GET",
                 headers: [],
                 body: ""
             },
             response: {
                 httpStatus: "",
+                consumeTime: -1,
                 headers: [],
                 body: "",
             }
@@ -53,9 +54,9 @@ export default createStore({
             },
             responseBodyEditor: undefined,
             requestBodyEditor: undefined,
-            requestBodyContentType: "",
-            responseBodyContentType: "",
-            requestBodyMode: "",
+            requestBodyContentType: "JSON",
+            responseBodyContentType: "TEXT",
+            requestBodyMode: "ace/mode/json5",
         },
         //request dom节点
         dom: {
@@ -64,7 +65,8 @@ export default createStore({
                 startInit: false,
                 activeTabName: "requestBody",
                 requestHeaderTableRef: [],
-                urlArgsTableRef: []
+                urlArgsTableRef: [],
+                syncWithUrlToArgs: false,
             },
             response: {
                 show: false,
@@ -78,7 +80,11 @@ export default createStore({
             state.curl.curlText = text
         },
         setCurlRequest(state, curl) {
-            state.curl.request.url = curl.url
+            if (curl === undefined) {
+                return
+            }
+            state.curl.request.url = curl.url;
+            state.curl.request.initUrl = curl.url
             state.curl.request.headers = curl.header
             state.curl.request.method = curl.method
             state.curl.request.body = curl.body
@@ -94,12 +100,12 @@ export default createStore({
         showResponseTab(state) {
             state.dom.response.show = true
         },
-        initByCurlText(state, curlText) {
-            let curl = CURLParser(curlText);
+        initByCurlText(state, curl) {
             //构建request
             this.commit('setCurlRequest', curl)
             //初始化request
             state.dom.request.startInit = true
+
             //重设responseTab
             this.commit('revertResponseTabActive')
             //显示tab
@@ -111,24 +117,33 @@ export default createStore({
 
             //请求失败回调
             let errorCallback = function (_error) {
+                ElMessage.error('请求失败')
                 state.dom.loading = false
+                state.curl.response.httpStatus = 500
+                state.curl.response.consumeTime = -1
                 state.curl.response.body = _error.toString()
                 state.ace.responseBodyEditor.setValue(_error.toString(), 1)
                 state.ace.responseBodyEditor.getSession().setMode("ace/mode/text")
             };
 
+            let startMs = new Date().valueOf()
             window.sendRequest(curlArgs, function (response) {
                 state.curl.response.httpStatus = response.statusCode
                 state.curl.response.headers = response.headers
                 //请求结束
                 let body = ""
                 response.on('end', () => {
+                    state.curl.response.consumeTime = new Date().valueOf() - startMs
                     state.dom.loading = false
                     state.curl.response.body = body
                     let result = parseBody(body)
                     state.ace.responseBodyEditor.setValue(result.body, 1)
                     state.ace.responseBodyEditor.getSession().setMode(result.mode)
                     state.ace.responseBodyContentType = result.contentType
+                    ElMessage({
+                        message: '发送成功~',
+                        type: 'success',
+                    })
                 })
                 //返回体,body过大会多次回调
                 response.on('data', (data) => {

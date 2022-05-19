@@ -4,7 +4,7 @@
       状态码: {{ httpStatus }}
     </div>
     <div id="consumeTime">
-      耗时: 200ms
+      耗时: {{ consumeTime }}ms
     </div>
   </div>
 </template>
@@ -15,7 +15,6 @@ export default {
   name: "ResponseBodyTip",
   data: function () {
     return {
-      consumeTime: "900ms",
       style: {
         backgroundColor: "#00785a",
       },
@@ -30,6 +29,9 @@ export default {
     httpStatus() {
       return this.$store.state.curl.response.httpStatus;
     },
+    consumeTime() {
+      return this.$store.state.curl.response.consumeTime;
+    },
   },
   watch: {
     httpStatus: function (newValue) {
@@ -40,7 +42,7 @@ export default {
       } else {
         this.style.backgroundColor = this.supportColor.warning
       }
-    }
+    },
   }
 }
 </script>
