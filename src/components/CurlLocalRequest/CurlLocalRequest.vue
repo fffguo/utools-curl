@@ -12,7 +12,7 @@
 
 import Request from "@/components/CurlLocalRequest/request/Request";
 import Response from "@/components/CurlLocalRequest/response/Response";
-
+import CURLParser from "parse-curl";
 
 export default {
   name: 'CurlLocalRequest',
@@ -40,9 +40,30 @@ export default {
   methods: {},
   mounted() {
     window.utools.onPluginEnter(({code, type, payload}) => {
-      console.log('用户进入插件', code, type, payload)
+      console.log('用户进入插件', code, type)
+      //     payload=`curl 'http://item-admin-api.1000.com.test6.ck/api/spu/query' \\
+      // -H 'Accept: application/json' \\
+      // -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' \\
+      // -H 'Connection: keep-alive' \\
+      // -H 'Content-Type: application/json' \\
+      // -H 'Cookie: _ga=GA1.3.1304103374.1651715581; _gid=GA1.3.721802883.1652662788; SSOTICKET=; SSOEXPIRES=; SSOTHRESHOLD=; sxuid=-755786324; a9a68f4fefd3b693f10be4a89799dc48=77e71e0956fe48abb6d14d0b492a859c; qmuid=-1030958195; cxuid=1391111; gauserid=qm13780sgr; _gat=1' \\
+      // -H 'Origin: http://web.1000.com.test6.ck' \\
+      // -H 'Platform: pc' \\
+      // -H 'Platform-No: ' \\
+      // -H 'Referer: http://web.1000.com.test6.ck/' \\
+      // -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.47' \\
+      // -H 'reqId: e2692470-d736-11ec-b8f8-f32dbe9955c5' \\
+      // -H 'systemId: 0031' \\
+      // --data-raw '{"channel":"d2p","searchTypeList":["1"],"brandId":"","queryForbidSale":"","recentPriceUpdateTime":"","keywords":"","pageNo":0,"pageSize":10,"sortEntries":[],"spuBusinessId":"","tagId":"","parentItem":"","cats":""}' \\
+      // --compressed \\
+      // --insecure`
+      this.$store.state.curl.curlText = payload
+
+      let curl = CURLParser(payload);
+
       //初始化
-      this.$store.commit('initByCurlText', this.$store.state.curl.curlText)
+      this.$store.commit('initByCurlText', curl);
+
       let curlArgs = {
         url: this.$store.state.curl.request.url,
         method: this.$store.state.curl.request.method,

@@ -54,10 +54,12 @@ export default {
 
     if (this.editorName === "requestBodyEditor") {
       this.$store.state.ace.requestBodyEditor = this.aceEditor
+      this.aceEditor.setOption("maxLines", "12");
     }
 
     if (this.editorName === "responseBodyEditor") {
       this.$store.state.ace.responseBodyEditor = this.aceEditor
+      this.aceEditor.setOption("maxLines", "24");
     }
   },
   computed: {

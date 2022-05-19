@@ -2,7 +2,8 @@
   <div>
     <el-table ref="tableDataRef"
               :data="headerList"
-              style="width: 100%">
+              max-height="250"
+    >
       <el-table-column type="selection" width="55"/>
       <el-table-column label="参数名" width="300">
         <template #default="scope">
@@ -20,9 +21,9 @@
                     v-on:input="handleRowChange"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" show-overflow-tooltip>
+      <el-table-column label="操作" show-overflow-tooltip width="100">
         <template #default="scope">
-          <el-button v-show="scope.row.showDel" v-on:click="delRow(scope.row.index)">删除</el-button>
+          <el-button v-show="scope.row.showDel" type="danger" v-on:click="delRow(scope.row.index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
