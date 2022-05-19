@@ -5,7 +5,7 @@
       <el-select v-model="contentType" class="m-2" style="width: 85px" @change="changeLanguage">
         <el-option key="JSON" value="JSON"/>
         <el-option key="XML" value="XML"/>
-        <el-option key="Text" value="Text"/>
+        <el-option key="TEXT" value="Text"/>
       </el-select>
     </div>
     <div class="optionButton" v-on:click="beautifyBody">
@@ -48,20 +48,32 @@ import {pd} from "pretty-data";
 // ace 文本格式美化
 import {beautify} from 'ace-builds/src-noconflict/ext-beautify'
 
-// import * as ass from "ace-builds/src-noconflict/ace";
-
 export default {
   name: "AceEditorOption",
   data: function () {
     return {
-      contentType: "JSON",
+      contentTypeTemp: "",
     }
   },
   props: {
     aceEditor: Object,
+    editorName: String,
+    contextText: String,
     showReplaceButton: Boolean,
     showRevertButton: Boolean,
-    contextText: String,
+  },
+  computed: {
+    contentType: function () {
+      let request = this.$store.state.ace.requestBodyContentType;
+      let response = this.$store.state.ace.responseBodyContentType;
+      if (this.editorName === "requestBodyEditor") {
+        return request
+      }
+      if (this.editorName === "responseBodyEditor") {
+        return response
+      }
+      return "JSON"
+    },
   },
   methods: {
     changeLanguage: function (value) {
@@ -76,8 +88,15 @@ export default {
         default:
           language = this.$store.state.ace.supportedLanguage.text;
       }
-      console.log(language)
+      this.$store.state.ace.requestBodyMode = language;
       this.aceEditor.getSession().setMode(language);
+
+      if (this.editorName === "requestBodyEditor") {
+        this.$store.state.ace.requestBodyContentType = value;
+      }
+      if (this.editorName === "responseBodyEditor") {
+        this.$store.state.ace.responseBodyContentType = value;
+      }
     },
     revertBody: function () {
       this.aceEditor.setValue(this.contextText, 1)
@@ -108,13 +127,8 @@ export default {
     },
     replaceBody: function () {
       this.aceEditor.execCommand('replace');
-      // let dom = ass.define.modules['ace/lib/dom'];
-      // console.log(document.body)
-      // var fullScreen = dom.toggleCssClass(document.body, "fullScreen")
-      // dom.setCssClass(this.aceEditor.container, "fullScreen", fullScreen)
-      // this.aceEditor.setAutoScrollEditorIntoView(!fullScreen)
-      // this.aceEditor.resize()
     },
+
   }
 }
 </script>

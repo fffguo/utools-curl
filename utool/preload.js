@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 require('url');
 
 
@@ -14,7 +15,7 @@ args 示例结构
 callback参考：http://nodejs.cn/learn/the-nodejs-http-module#httpincomingmessage    http.IncomingMessage
 */
 // eslint-disable-next-line no-undef
-sendRequest = function (args, callback) {
+sendRequest = function (args, callback, errorCallback) {
     const myURL = new URL(args.url);
     const options = {
         hostname: myURL.hostname,
@@ -23,11 +24,19 @@ sendRequest = function (args, callback) {
         method: args.method,
         headers: args.headers,
     };
-    const request = http.request(options, callback)
+    let request;
+    if (args.url.startsWith('https')) {
+        request = https.request(options, callback);
+    } else {
+        request = http.request(options, callback);
+    }
     if (args.body !== undefined) {
         request.write(args.body);
     }
+    console.log("sendRequest", options, args.body);
+    request.on('error', errorCallback);
     request.end();
+
 }
 
 // eslint-disable-next-line no-undef

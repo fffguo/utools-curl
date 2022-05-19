@@ -3,6 +3,29 @@ import {pd} from "pretty-data";
 
 const CURLParser = require('parse-curl')
 
+function parseBody(body) {
+    let result = {
+        body: body,
+        mode: "ace/mode/text",
+        contentType: "TEXT"
+    }
+    try {
+        result.body = pd.json(body)
+        result.mode = "ace/mode/json5"
+        result.contentType = "JSON"
+    } catch (e) {
+        try {
+            result.body = pd.xml(body)
+            result.mode = "ace/mode/xml"
+            result.contentType = "XML"
+        } catch (e) {
+            result.body = body
+            result.mode = "ace/mode/text"
+            result.contentType = "TEXT"
+        }
+    }
+    return result
+}
 
 export default createStore({
     state: {
@@ -29,7 +52,10 @@ export default createStore({
                 text: "ace/mode/text",
             },
             responseBodyEditor: undefined,
-            requestBodyEditor: undefined
+            requestBodyEditor: undefined,
+            requestBodyContentType: "",
+            responseBodyContentType: "",
+            requestBodyMode: "",
         },
         //request dom节点
         dom: {
@@ -37,7 +63,8 @@ export default createStore({
             request: {
                 startInit: false,
                 activeTabName: "requestBody",
-                urlArgs: []
+                requestHeaderTableRef: [],
+                urlArgsTableRef: []
             },
             response: {
                 show: false,
@@ -55,8 +82,11 @@ export default createStore({
             state.curl.request.headers = curl.header
             state.curl.request.method = curl.method
             state.curl.request.body = curl.body
-            state.ace.requestBodyEditor.setValue(pd.json(curl.body), 1)
-            state.ace.requestBodyEditor.getSession().setMode("ace/mode/json5")
+            let result = parseBody(curl.body)
+            state.ace.requestBodyEditor.setValue(result.body, 1)
+            state.ace.requestBodyEditor.getSession().setMode(result.mode)
+            state.ace.requestBodyContentType = result.contentType
+            state.ace.requestBodyMode = result.mode
         },
         revertResponseTabActive(state) {
             state.dom.response.activeTabName = "responseResult"
@@ -76,15 +106,17 @@ export default createStore({
             this.commit('showResponseTab')
         },
         //发送请求
-        sendRequest(state) {
+        sendRequest(state, curlArgs) {
             state.dom.loading = true
 
-            let curlArgs = {
-                url: state.curl.request.url,
-                method: state.curl.request.method,
-                headers: state.curl.request.headers,
-                body: state.curl.request.body
-            }
+            //请求失败回调
+            let errorCallback = function (_error) {
+                state.dom.loading = false
+                state.curl.response.body = _error.toString()
+                state.ace.responseBodyEditor.setValue(_error.toString(), 1)
+                state.ace.responseBodyEditor.getSession().setMode("ace/mode/text")
+            };
+
             window.sendRequest(curlArgs, function (response) {
                 state.curl.response.httpStatus = response.statusCode
                 state.curl.response.headers = response.headers
@@ -93,21 +125,18 @@ export default createStore({
                 response.on('end', () => {
                     state.dom.loading = false
                     state.curl.response.body = body
-                    state.ace.responseBodyEditor.setValue(pd.json(body), 1)
-                    state.ace.responseBodyEditor.getSession().setMode("ace/mode/json5")
+                    let result = parseBody(body)
+                    state.ace.responseBodyEditor.setValue(result.body, 1)
+                    state.ace.responseBodyEditor.getSession().setMode(result.mode)
+                    state.ace.responseBodyContentType = result.contentType
                 })
                 //返回体,body过大会多次回调
                 response.on('data', (data) => {
                     body += data.toString();
                 })
                 //失败
-                response.on('error', error => {
-                    state.dom.loading = false
-                    state.curl.response.body = error.toString()
-                    state.ace.responseBodyEditor.setValue(error.toString(), 1)
-                    state.ace.responseBodyEditor.getSession().setMode("ace/mode/text")
-                })
-            })
+                response.on('error', errorCallback)
+            }, errorCallback)
             // 挂载
             window.curlVuex = state
         },
@@ -120,6 +149,7 @@ export default createStore({
             state.ace.responseBodyEditor.setValue("", 1)
             state.ace.responseBodyEditor.getSession().setMode("ace/mode/json5")
         },
+
     },
     actions: {},
     getters: {},

@@ -4,7 +4,7 @@
     <el-tabs v-model="getActiveTabName" class="demo-tabs" type="border-card">
 
       <el-tab-pane label="请求头部" name="requestHeader">
-        <RequestHeaders :tableDataList="getHeadersTableData" class="tableArgsStyle"/>
+        <RequestHeaders class="tableArgsStyle"/>
       </el-tab-pane>
       <el-tab-pane label="请求体" name="requestBody">
         <RequestBody/>
@@ -52,18 +52,7 @@ export default {
   computed: {
     getActiveTabName() {
       return this.$store.state.dom.request.activeTabName
-    },
-    getHeadersTableData: function () {
-      let headers = this.$store.state.curl.request.headers;
-      let headerArr = [];
-      for (const header in headers) {
-        headerArr.push({
-          key: header,
-          value: headers[header]
-        })
-      }
-      return headerArr
-    },
+    }
   }
 }
 </script>

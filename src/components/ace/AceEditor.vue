@@ -1,13 +1,13 @@
 <template>
   <div class="editor">
     <AceEditorOption :aceEditor="aceEditor"
+                     :editor-name="editorName"
                      :context-text="contentText"
                      :show-replace-button="!readOnly"
-                     :show-revert-button="readOnly"/>
+                     :show-revert-button="readOnly"
+    />
     <div ref="ace" class="ace-editor">
     </div>
-    <!--    <el-backtop :right="50" :bottom="50" />-->
-
   </div>
 </template>
 
@@ -70,7 +70,7 @@ export default {
         return this.$store.state.curl.response.body
       }
       return null
-    }
+    },
   }
 }
 </script>
@@ -82,3 +82,4 @@ export default {
   border: 1px solid var(--el-border-color);
 }
 </style>
+z
