@@ -1,16 +1,5 @@
 # utools-curl
 
-## 插件效果图预览
-
-> 插件入口
-
-![入口图](https://github.com/fffguo/utools-curl/tree/master/doc/readme/entrance.png)
-
-> 插件进入效果
-
-![预览图1](https://github.com/fffguo/utools-curl/tree/master/doc/readme/preImg1.png)
-![预览图2](https://github.com/fffguo/utools-curl/tree/master/doc/readme/preImg2.png)
-
 ## 插件介绍
 
 在日常开发中，经常需要复制测试环境的curl在本地进行调试：
@@ -30,10 +19,21 @@
 
 ## 插件使用说明
 
-1. <kbd>F12打开浏览器调试工具</kbd> <kbd>></kbd> <kbd>Network</kbd> <kbd>></kbd> 选中某条请求<kbd>右键</kbd> <kbd>></kbd> <kbd>
-   copy</kbd> <kbd>></kbd> <kbd>copy as curl (bash)</kbd> > 这样就得到了一条curl命令
-2. <kbd>alt+space</kbd> <kbd>></kbd> 呼出utools
-3. 回车进入插件即可
+1. <kbd>F12打开浏览器调试工具</kbd> <kbd>></kbd> <kbd>Network</kbd> <kbd>></kbd> <kbd>选中某条请求右键</kbd> <kbd>></kbd> <kbd>
+   copy</kbd> <kbd>></kbd> <kbd>copy as curl (bash)</kbd> > <kbd>这样就得到了一条curl命令</kbd>
+2. <kbd>alt+space</kbd> <kbd>></kbd> <kbd>呼出utools</kbd>
+3. <kbd>回车进入插件即可</kbd>
+
+## 插件效果图预览
+
+> 插件入口
+
+![入口图](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/entrance.png)
+
+> 插件进入效果
+
+![预览图1](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg1.png)
+![预览图2](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg1.png)
 
 ## Project setup
 
