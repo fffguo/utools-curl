@@ -1,9 +1,7 @@
 <template>
   <div>
     <el-table ref="tableDataRef"
-              :data="headerList"
-              max-height="250"
-    >
+              :data="headerList">
       <el-table-column type="selection" width="55"/>
       <el-table-column label="参数名" width="300">
         <template #default="scope">

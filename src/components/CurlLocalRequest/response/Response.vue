@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="getActiveTabName" class="demo-tabs" type="border-card">
+  <el-tabs v-model="this.$store.state.dom.response.activeTabName" class="demo-tabs" type="border-card">
     <el-tab-pane label="返回结果" name="responseResult">
       <ResponseBody/>
     </el-tab-pane>
@@ -29,9 +29,6 @@ export default {
     },
     getResponseHeaders() {
       return this.$store.state.curl.response.headers
-    },
-    getActiveTabName() {
-      return this.$store.state.dom.response.activeTabName
     },
   },
   methods: {}

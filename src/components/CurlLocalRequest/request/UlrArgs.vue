@@ -4,7 +4,7 @@
               :data="args"
               style="width: 100%"
               @selection-change="handleSelectionChange"
-      >
+    >
       <el-table-column type="selection" width="55"/>
       <el-table-column label="参数名" width="250">
         <template #default="scope">
@@ -224,6 +224,8 @@ export default {
         this.$refs.tableDataRef.toggleAllSelection();
         //更新vuex
         this.$store.state.dom.request.urlArgsTableRef = this.$refs.tableDataRef
+        this.$store.state.dom.request.startInit = false
+
       }
     },
   }
