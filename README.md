@@ -37,7 +37,7 @@
 ### 2. 插件进入效果
 
 ![预览图1](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg1.png)
-![预览图2](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg1.png)
+![预览图2](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg2.png)
 
 ## Project setup
 
