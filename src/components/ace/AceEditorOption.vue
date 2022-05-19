@@ -120,6 +120,7 @@ export default {
       ElMessage({
         message: '复制成功',
         type: 'success',
+        duration: 500
       })
     },
     searchBody: function () {

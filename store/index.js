@@ -5,8 +5,11 @@ import {ElMessage} from "element-plus";
 function parseBody(body) {
     let result = {
         body: body,
-        mode: "ace/mode/text",
-        contentType: "TEXT"
+        mode: "ace/mode/json5",
+        contentType: "JSON"
+    }
+    if (body === undefined || body === "") {
+        return result;
     }
     try {
         result.body = pd.json(body)
@@ -97,6 +100,9 @@ export default createStore({
         revertResponseTabActive(state) {
             state.dom.response.activeTabName = "responseResult"
         },
+        revertRequestTabActive(state) {
+            state.dom.request.activeTabName = "requestBody";
+        },
         showResponseTab(state) {
             state.dom.response.show = true
         },
@@ -106,6 +112,8 @@ export default createStore({
             //初始化request
             state.dom.request.startInit = true
 
+            //重设requestTab
+            this.commit('revertRequestTabActive')
             //重设responseTab
             this.commit('revertResponseTabActive')
             //显示tab
@@ -117,7 +125,10 @@ export default createStore({
 
             //请求失败回调
             let errorCallback = function (_error) {
-                ElMessage.error('请求失败')
+                ElMessage.error({
+                    message: '请求失败',
+                    duration: 500,
+                })
                 state.dom.loading = false
                 state.curl.response.httpStatus = 500
                 state.curl.response.consumeTime = -1
