@@ -56,29 +56,55 @@ export default {
 
     //发送请求
     sendRequest: function () {
-      this.$store.commit('sendRequest')
+      //处理header
+      let headerRows = this.$store.state.dom.request.requestHeaderTableRef.getSelectionRows();
+      let headers = {}
+      headerRows
+          .filter(header => header !== undefined && header.key !== undefined && header.key !== "" && header.value !== undefined)
+          .forEach(header => headers[header.key] = header.value);
+      //处理body
+      let body = this.$store.state.ace.requestBodyEditor.getValue();
+      if (this.$store.state.ace.requestBodyMode === this.$store.state.ace.supportedLanguage.json) {
+        body = JSON.stringify(JSON.parse(this.$store.state.ace.requestBodyEditor.getValue()))
+      }
+      //构造请求
+      let curlArgs = {
+        url: this.$store.state.curl.request.url,
+        method: this.$store.state.curl.request.method,
+        headers: headers,
+        body: body,
+      }
+      //发送请求
+      this.$store.commit('sendRequest', curlArgs)
     },
     cancelRequest: function () {
       this.$store.commit('cancelRequest')
     },
     //刷新url
     refreshUrl(selection) {
-      console.log("selection", selection)
       let argString = selection.map(arg => {
         if (arg !== undefined) {
           return arg.key + "=" + (arg.value === undefined ? "" : arg.value);
         }
       }).join("&");
-
+      let url = this.$store.state.curl.request.url;
+      //没有问号
+      if (url.indexOf("?") === -1) {
+        if (argString !== "") {
+          this.$store.state.curl.request.url = url + "?" + argString;
+        }
+        return
+      }
       //替换参数
       let pattern = /[^?]+$/
-      let url = this.$store.state.curl.request.url;
+      let newUrl = "";
       if (pattern.test(url)) {
-        this.$store.state.curl.request.url = url.replace(/[^?]+$/, argString)
+        newUrl = url.replace(/[^?]+$/, argString);
       } else {
-        let mark = url.endsWith('?') === -1 ? "?" : ""
-        this.$store.state.curl.request.url = url + mark + argString
+        let mark = url.endsWith('?') === -1 ? "?" : "";
+        newUrl = url + mark + argString;
       }
+      this.$store.state.curl.request.url = newUrl
     },
     //增加参数
     addUrlArg(key) {

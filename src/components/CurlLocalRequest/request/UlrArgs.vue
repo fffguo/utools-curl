@@ -97,7 +97,6 @@ export default {
     //删除行
     delRow(index) {
       this.args.forEach((item, _index, args) => {
-        console.log(item, _index, args);
         if (item.index === index) {
           args.splice(_index, 1);
         }
@@ -105,12 +104,15 @@ export default {
     },
     //args末尾push空数据
     pushEmpty() {
-      this.args.max
+      let maxIndex = 0;
+      if (this.args.length > 0) {
+        maxIndex = Math.max.apply(Math, this.args.map(arg => arg.index))
+      }
       //添加一行
       this.args.push({
         key: "",
         value: "",
-        index: Math.max.apply(Math, this.args.map(arg => arg.index)) + 1,
+        index: maxIndex + 1,
         showDel: false
       })
       //勾选最后一行空行
@@ -157,6 +159,8 @@ export default {
         this.args = this.urlArgToArr(this.$store.state.curl.request.url);
         this.pushEmpty();
         this.$refs.tableDataRef.toggleAllSelection();
+        //更新vuex
+        this.$store.state.dom.request.urlArgsTableRef = this.$refs.tableDataRef
       }
     },
   }
