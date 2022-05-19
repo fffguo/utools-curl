@@ -8,5 +8,6 @@ module.exports = defineConfig({
                 // options
             }),
         ],
-    }
+    },
+    publicPath: './',
 })

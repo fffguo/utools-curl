@@ -191,7 +191,6 @@ export default {
 
 .requestTypeStyle {
   width: 115px;
-  margin-left: 20px;
 }
 
 .elRow {
