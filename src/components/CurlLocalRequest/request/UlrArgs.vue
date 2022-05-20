@@ -92,7 +92,6 @@ export default {
       if (this.$store.state.dom.request.syncWithUrlToArgs === true) {
         return;
       }
-      console.log("handleSelectionChange", selection);
       selection = this.getSelectRows().filter(sel => {
         return sel !== undefined && sel.key !== undefined && sel.key !== ""
       });

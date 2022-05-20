@@ -2,7 +2,6 @@ const http = require('http');
 const https = require('https');
 require('url');
 
-
 /*
 args 示例结构
 {
@@ -20,13 +19,14 @@ sendRequest = function (args, callback, errorCallback) {
         const myURL = new URL(args.url);
         const options = {
             hostname: myURL.hostname,
-            port: myURL.port === "" ? '80' : myURL.port,
+            port: myURL.port === "" ? (args.url.startsWith('https') ? 443 : 80) : myURL.port,
             path: myURL.pathname + myURL.search,
             method: args.method,
             headers: args.headers,
         };
         let request;
         if (args.url.startsWith('https')) {
+
             request = https.request(options, callback);
         } else {
             request = http.request(options, callback);
