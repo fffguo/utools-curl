@@ -32,12 +32,7 @@
 
 ### 1. 插件入口
 
-![入口图](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/entrance.png)
-
-### 2. 插件进入效果
-
-![预览图1](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg1.png)
-![预览图2](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/preImg2.png)
+![效果预览](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/utools-curl.gif)
 
 ## Project setup
 
