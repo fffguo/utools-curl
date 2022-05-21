@@ -30,9 +30,7 @@
 
 ## 四、插件效果图预览
 
-### 1. 插件入口
-
-![效果预览](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/utools-curl.gif)
+![效果预览](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/utools-curl-preview.gif)
 
 ## Project setup
 
