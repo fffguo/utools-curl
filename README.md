@@ -30,6 +30,8 @@
 
 ## 四、插件效果图预览
 
+[点击查看大图](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/utools-curl-preview.gif)
+
 ![效果预览](https://raw.githubusercontent.com/fffguo/picture-warehouse/main/github/utools-curl-preview.gif)
 
 ## Project setup
