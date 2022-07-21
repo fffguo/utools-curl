@@ -96,7 +96,8 @@ export default {
     clickReplaceLocalhost: function () {
       let url = this.$store.state.curl.request.url;
       let urlObject = window.newURL(url);
-      this.$store.state.curl.request.url = url.replace(urlObject.hostname + urlObject.port, "127.0.0.1:8080")
+      console.log(urlObject)
+      this.$store.state.curl.request.url = url.replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), "127.0.0.1:8080")
     },
     //还原域名端口
     clickRevertDomain: function () {
