@@ -1,7 +1,6 @@
 const http = require('http');
 const https = require('https');
 require('url');
-
 /*
 args 示例结构
 {
@@ -22,11 +21,10 @@ sendRequest = function (args, callback, errorCallback) {
             port: myURL.port === "" ? (args.url.startsWith('https') ? 443 : 80) : myURL.port,
             path: myURL.pathname + myURL.search,
             method: args.method,
-            headers: args.headers,
+            headers: filterHeader(args.headers),
         };
         let request;
         if (args.url.startsWith('https')) {
-
             request = https.request(options, callback);
         } else {
             request = http.request(options, callback);
@@ -42,10 +40,17 @@ sendRequest = function (args, callback, errorCallback) {
         console.log("sendRequest error:", e);
         errorCallback(e)
     }
-
-
 }
 
+let filterHeader = function (headers) {
+    let newHeaders = {}
+    for (const key in headers) {
+        if ("Accept-Encoding" !== key) {
+            newHeaders[key] = headers[key]
+        }
+    }
+    return newHeaders
+};
 
 // eslint-disable-next-line no-undef
 newURL = function (url) {
