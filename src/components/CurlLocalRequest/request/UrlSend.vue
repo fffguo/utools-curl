@@ -3,6 +3,11 @@
   <div id="urlSend">
     <el-row class="elRow">
       <el-col :span="4" class="elCol">
+        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="makeCurlAndCopy">
+          <el-tag class="ml-2">复制curl</el-tag>
+        </div>
+      </el-col>
+      <el-col :span="4" class="elCol">
         <div class="grid-content bg-purple-dark cursorPointer" v-on:click="clickRevertDomain">
           <el-tag class="ml-2">还原域名</el-tag>
         </div>
@@ -31,7 +36,8 @@
         </el-select>
       </template>
       <template #append>
-        <el-button v-show="!loading" id="sendButton" size="large" type="primary" v-on:click="sendRequest">发送</el-button>
+        <el-button v-show="!loading" id="sendButton" size="large" type="primary" v-on:click="sendRequest">发送
+        </el-button>
         <el-button v-show="loading" id="cancelButton" class="cursorPointer" size="large" type="primary"
                    v-on:click="cancelRequest">取消
         </el-button>
@@ -41,6 +47,8 @@
 </template>
 
 <script>
+import curlString from "curl-string";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "UrlComponent",
@@ -91,6 +99,22 @@ export default {
       }
       //发送请求
       this.$store.commit('sendRequest', curlArgs)
+    },
+    //生成curl并赋值
+    makeCurlAndCopy: function () {
+      const url = this.$store.state.curl.request.url;
+      const options = {
+        method: this.$store.state.curl.request.method,
+        headers: this.$store.state.curl.request.headers,
+        body: this.$store.state.curl.request.body
+      };
+      const curlStringOptions = {colorJson: false, jsonIndentWidth: 2}
+      window.utools.copyText(curlString(url, options, curlStringOptions))
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 500
+      })
     },
     //替换域名端口
     clickReplaceLocalhost: function () {
