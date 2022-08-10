@@ -2,14 +2,38 @@
 
   <div id="urlSend">
     <el-row class="elRow">
-      <el-col :span="4" class="elCol">
+      <!--      <el-col :span="3" class="elCol">-->
+      <!--        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="clearCurl">-->
+      <!--          <el-tag class="ml-2">清空</el-tag>-->
+      <!--        </div>-->
+      <!--      </el-col>-->
+      <el-col :span="3" class="elCol">
+        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="makeCurlAndCopy">
+          <el-tag class="ml-2">复制curl</el-tag>
+        </div>
+      </el-col>
+      <el-col :span="3" class="elCol">
         <div class="grid-content bg-purple-dark cursorPointer" v-on:click="clickRevertDomain">
           <el-tag class="ml-2">还原域名</el-tag>
         </div>
       </el-col>
-      <el-col :span="5" class="elCol">
-        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="clickReplaceLocalhost">
-          <el-tag class="ml-2" type="success">域名替换127.0.0.1:8080</el-tag>
+      <el-col :span="7" class="elCol">
+        <div style="width: 200px">
+          <el-input v-model="replaceDomain"
+                    class="input-with-select"
+                    placeholder="127.0.0.1:8080"
+                    size="small"
+                    @blur="domainReplaceChangeBlur"
+                    @focus="domainReplaceChangeFocus">
+            <template #prepend>
+              <el-button id="domainRevertButton" size="small" type="primary" v-on:click="clickRevertDomain">还原
+              </el-button>
+            </template>
+            <template #append>
+              <el-button id="domainReplaceButton" size="small" type="primary" v-on:click="clickReplaceDomain">替换
+              </el-button>
+            </template>
+          </el-input>
         </div>
       </el-col>
     </el-row>
@@ -31,7 +55,8 @@
         </el-select>
       </template>
       <template #append>
-        <el-button v-show="!loading" id="sendButton" size="large" type="primary" v-on:click="sendRequest">发送</el-button>
+        <el-button v-show="!loading" id="sendButton" size="large" type="primary" v-on:click="sendRequest">发送
+        </el-button>
         <el-button v-show="loading" id="cancelButton" class="cursorPointer" size="large" type="primary"
                    v-on:click="cancelRequest">取消
         </el-button>
@@ -41,6 +66,8 @@
 </template>
 
 <script>
+import curlString from "curl-string";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "UrlComponent",
@@ -55,6 +82,7 @@ export default {
   data: function () {
     return {
       oldUrl: "",
+      replaceDomain: ""
     }
   },
   watch: {
@@ -92,12 +120,48 @@ export default {
       //发送请求
       this.$store.commit('sendRequest', curlArgs)
     },
+    //生成curl并赋值
+    clearCurl: function () {
+      this.$store.state.curl.request.url = ""
+      this.$store.state.curl.request.method = ""
+      this.$store.state.curl.request.headers = ""
+      this.$store.state.curl.request.body = ""
+    },
+    //生成curl并赋值
+    makeCurlAndCopy: function () {
+      const url = this.$store.state.curl.request.url;
+      const options = {
+        method: this.$store.state.curl.request.method,
+        headers: this.$store.state.curl.request.headers,
+        body: this.$store.state.curl.request.body
+      };
+      const curlStringOptions = {colorJson: false, jsonIndentWidth: 2}
+      window.utools.copyText(curlString(url, options, curlStringOptions))
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 500
+      })
+    },
     //替换域名端口
-    clickReplaceLocalhost: function () {
+    clickReplaceDomain: function () {
       let url = this.$store.state.curl.request.url;
+      console.log(url)
+
       let urlObject = window.newURL(url);
       console.log(urlObject)
-      this.$store.state.curl.request.url = url.replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), "127.0.0.1:8080")
+      let domain = this.replaceDomain === "" ? "127.0.0.1:8080" : this.replaceDomain
+      try {
+        window.newURL("https://" + domain);
+      } catch (e) {
+        ElMessage({
+          message: '域名不合法' + e,
+          type: 'error',
+          duration: 500
+        })
+        return
+      }
+      this.$store.state.curl.request.url = url.replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
     },
     //还原域名端口
     clickRevertDomain: function () {
@@ -180,6 +244,17 @@ export default {
       this.oldUrl = newUrl;
       this.$store.state.dom.request.syncWithUrlToArgs = false;
     },
+
+    domainReplaceChangeFocus: function () {
+      if (this.replaceDomain === "") {
+        this.replaceDomain = "127.0.0.1:"
+      }
+    },
+    domainReplaceChangeBlur: function () {
+      if (this.replaceDomain === "127.0.0.1:") {
+        this.replaceDomain = ""
+      }
+    },
   }
 }
 </script>
@@ -221,6 +296,10 @@ export default {
   background-color: #f39c12;
   width: 100px;
   border-radius: 0 2px 2px 0;
+}
+
+#domainReplaceButton {
+  color: green;
 }
 
 </style>

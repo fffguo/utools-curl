@@ -40,11 +40,10 @@ export default {
   methods: {},
   mounted() {
     window.utools.onPluginEnter(({code, type, payload}) => {
-      console.log('用户进入插件', code, type)
+      console.log('用户进入插件', code, type, payload)
       this.$store.state.curl.curlText = payload
-
       let curl = CURLParser(payload);
-
+      console.log("curl:", curl)
       //初始化
       this.$store.commit('initByCurlText', curl);
 
@@ -55,7 +54,9 @@ export default {
         body: this.$store.state.curl.request.body
       }
       //发送
-      this.$store.commit('sendRequest', curlArgs)
+      if (curl !== undefined) {
+        this.$store.commit('sendRequest', curlArgs);
+      }
 
     });
   },
