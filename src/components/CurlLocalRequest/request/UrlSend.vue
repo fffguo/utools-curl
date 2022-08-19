@@ -136,7 +136,7 @@ export default {
         body: this.$store.state.curl.request.body
       };
       const curlStringOptions = {colorJson: false, jsonIndentWidth: 2}
-      window.utools.copyText(curlString(url, options, curlStringOptions))
+      window.utools.copyText(curlString(url, options, curlStringOptions).trim())
       ElMessage({
         message: '复制成功',
         type: 'success',
