@@ -21,7 +21,7 @@ sendRequest = function (args, callback, errorCallback) {
             port: myURL.port === "" ? (args.url.startsWith('https') ? 443 : 80) : myURL.port,
             path: myURL.pathname + myURL.search,
             method: args.method,
-            headers: filterHeader(args.headers),
+            headers: handleHeader(args.headers, args.body),
         };
         let request;
         if (args.url.startsWith('https')) {
@@ -42,11 +42,14 @@ sendRequest = function (args, callback, errorCallback) {
     }
 }
 
-let filterHeader = function (headers) {
+let handleHeader = function (headers, body) {
     let newHeaders = {}
     for (const key in headers) {
+        if ("Content-Type" === key && headers[key] === "application/x-www-form-urlencoded" && body !== undefined) {
+            newHeaders['Content-Length'] = Buffer.byteLength(body)
+        }
         if ("Accept-Encoding" !== key) {
-            newHeaders[key] = headers[key]
+            newHeaders[key] = headers[key];
         }
     }
     return newHeaders
