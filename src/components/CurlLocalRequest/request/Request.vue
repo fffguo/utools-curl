@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <UrlSend ref="urlSendRef" @refreshArgs="refreshArgs"/>
+    <UrlSend ref="urlSendRef" @refreshArgs="refreshArgs" @parseCurl="parseCurl"/>
     <el-tabs v-model="this.$store.state.dom.request.activeTabName" class="demo-tabs" type="border-card">
 
       <el-tab-pane label="请求头部" name="requestHeader">
@@ -47,6 +47,9 @@ export default {
     },
     changeUrlArg(oldKey, newKey, oldValue, newValue, index) {
       this.$refs.urlSendRef.changeUrlArg(oldKey, newKey, oldValue, newValue, index);
+    },
+    parseCurl(curlStr) {
+      this.$emit("parseCurl", curlStr)
     },
   },
   computed: {}

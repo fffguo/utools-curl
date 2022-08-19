@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  <el-card>-->
-    <Request/>
+    <Request @parseCurl="parseCurl"/>
     <el-divider id="divider"/>
     <Response v-show="getResponseShow"/>
     <!--  </el-card>-->
@@ -40,15 +40,13 @@ export default {
   methods: {
     isURL(s) {
       return /^https?:\/\//.test(s)
-    }
-  },
-  mounted() {
-    window.utools.onPluginEnter(({code, type, payload}) => {
-      console.log('用户进入插件', code, type, payload)
-      this.$store.state.curl.curlText = payload
-      let curl = CURLParser(payload);
-      if (curl === undefined && this.isURL(payload)) {
-        curl = {method: 'GET', url: payload, header: {}, body: ''};
+    },
+    parseCurl(curlStr)
+    {
+      this.$store.state.curl.curlText = curlStr
+      let curl = CURLParser(curlStr);
+      if (curl === undefined && this.isURL(curlStr)) {
+        curl = {method: 'GET', url: curlStr, header: {}, body: ''};
       }
       console.log("curl:", curl)
       //初始化
@@ -64,7 +62,12 @@ export default {
       if (curl !== undefined) {
         this.$store.commit('sendRequest', curlArgs);
       }
-
+    }
+  },
+  mounted() {
+    window.utools.onPluginEnter(({code, type, payload}) => {
+      console.log('用户进入插件', code, type, payload)
+      this.parseCurl(payload)
     });
   },
 

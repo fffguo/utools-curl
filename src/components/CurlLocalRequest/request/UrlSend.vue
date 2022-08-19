@@ -8,6 +8,11 @@
       <!--        </div>-->
       <!--      </el-col>-->
       <el-col :span="3" class="elCol">
+        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="getCurlAndCopy">
+          <el-tag class="ml-2">提取剪切板中的curl</el-tag>
+        </div>
+      </el-col>
+      <el-col :span="3" class="elCol">
         <div class="grid-content bg-purple-dark cursorPointer" v-on:click="makeCurlAndCopy">
           <el-tag class="ml-2">复制curl</el-tag>
         </div>
@@ -121,6 +126,28 @@ export default {
       this.$store.state.curl.request.method = ""
       this.$store.state.curl.request.headers = ""
       this.$store.state.curl.request.body = ""
+    },
+    //提取剪切板中的curl
+    getCurlAndCopy: function () {
+      navigator.clipboard.readText().then((text)=>{
+        if(/^(https?:\/\/|curl)/.test(text))
+        {
+          console.log('剪切板内容正常');
+          this.$emit("parseCurl", text)
+        }else{
+          ElMessage({
+            message: '不支持的剪切板内容',
+            type: 'error',
+            duration: 500
+          })
+        }
+      }).catch(()=>{
+        ElMessage({
+          message: '读取剪切板失败',
+          type: 'error',
+          duration: 500
+        })
+      });
     },
     //生成curl并赋值
     makeCurlAndCopy: function () {
