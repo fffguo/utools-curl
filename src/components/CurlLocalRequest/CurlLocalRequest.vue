@@ -37,12 +37,19 @@ export default {
     }
   },
 
-  methods: {},
+  methods: {
+    isURL(s) {
+      return /^https?:\/\//.test(s)
+    }
+  },
   mounted() {
     window.utools.onPluginEnter(({code, type, payload}) => {
       console.log('用户进入插件', code, type, payload)
       this.$store.state.curl.curlText = payload
       let curl = CURLParser(payload);
+      if(curl===undefined &&this.isURL(payload)){
+        curl= {method: 'GET', url: payload, header: {}, body: ''};
+      }
       console.log("curl:", curl)
       //初始化
       this.$store.commit('initByCurlText', curl);
