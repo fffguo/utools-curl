@@ -12,11 +12,6 @@
           <el-tag class="ml-2">复制curl</el-tag>
         </div>
       </el-col>
-      <el-col :span="3" class="elCol">
-        <div class="grid-content bg-purple-dark cursorPointer" v-on:click="clickRevertDomain">
-          <el-tag class="ml-2">还原域名</el-tag>
-        </div>
-      </el-col>
       <el-col :span="7" class="elCol">
         <div style="width: 200px">
           <el-input v-model="replaceDomain"
