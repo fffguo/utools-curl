@@ -47,8 +47,8 @@ export default {
       console.log('用户进入插件', code, type, payload)
       this.$store.state.curl.curlText = payload
       let curl = CURLParser(payload);
-      if(curl===undefined &&this.isURL(payload)){
-        curl= {method: 'GET', url: payload, header: {}, body: ''};
+      if (curl === undefined && this.isURL(payload)) {
+        curl = {method: 'GET', url: payload, header: {}, body: ''};
       }
       console.log("curl:", curl)
       //初始化

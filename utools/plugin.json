@@ -8,10 +8,12 @@
       "explain": "快速替换本地域名并请求,方便debug解决问题",
       "cmds": [
         {
-          "type": "over",
-          "label": "curl"
-            }
-          ]
+          "type": "regex",
+          "match": "/^(https?:\/\/|curl)/i",
+          "label": "curl",
+          "maxLength": 10000
         }
-	]
+      ]
+    }
+  ]
 }
