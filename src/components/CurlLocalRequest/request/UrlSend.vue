@@ -183,7 +183,9 @@ export default {
         })
         return
       }
-      this.$store.state.curl.request.url = url.replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
+      this.$store.state.curl.request.url = url
+          .replace("https://", "http://")
+          .replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
     },
     //还原域名端口
     clickRevertDomain: function () {
