@@ -172,8 +172,28 @@ export default createStore({
             state.ace.responseBodyEditor.getSession().setMode("ace/mode/json5")
         },
 
+
     },
     actions: {},
-    getters: {},
+    getters: {
+        //实时获取headers
+        getRealTimeHeaders(state) {
+            let headers = {}
+            state.dom.request.requestHeaderTableRef.getSelectionRows()
+                .filter(header => header !== undefined && header.key !== undefined && header.key !== "" && header.value !== undefined)
+                .forEach(header => headers[header.key] = header.value);
+            return headers;
+        },
+        //实时获取body
+        getRealTimeBody(state){
+            let body = state.ace.requestBodyEditor.getValue();
+            if (state.ace.requestBodyMode === state.ace.supportedLanguage.json) {
+                if (body !== undefined && body !== "") {
+                    body = JSON.stringify(JSON.parse(body));
+                }
+            }
+            return body
+        }
+    },
     modules: {}
 })
