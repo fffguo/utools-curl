@@ -185,11 +185,15 @@ export default createStore({
             return headers;
         },
         //实时获取body
-        getRealTimeBody(state){
+        getRealTimeBody(state) {
             let body = state.ace.requestBodyEditor.getValue();
             if (state.ace.requestBodyMode === state.ace.supportedLanguage.json) {
                 if (body !== undefined && body !== "") {
-                    body = JSON.stringify(JSON.parse(body));
+                    try {
+                        body = JSON.stringify(JSON.parse(body));
+                    } catch (e) {
+                        return body;
+                    }
                 }
             }
             return body
