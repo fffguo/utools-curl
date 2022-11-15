@@ -12,8 +12,7 @@
 
 import Request from "@/components/CurlLocalRequest/request/Request";
 import Response from "@/components/CurlLocalRequest/response/Response";
-import Curl from "parse-curl";
-
+import * as Curl from "parse-curl";
 export default {
   name: 'CurlLocalRequest',
   components: {
