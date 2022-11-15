@@ -23,6 +23,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  //margin-top: 60px;
+  background: white;
+  margin: -7px;
+  padding: 10px 12px 20px 7px;
+  overflow-x: hidden;
+  border-radius: 0.5%
 }
 </style>

@@ -97,25 +97,12 @@ export default {
 
     //发送请求
     sendRequest: function () {
-      //处理header
-      let headerRows = this.$store.state.dom.request.requestHeaderTableRef.getSelectionRows();
-      let headers = {}
-      headerRows
-          .filter(header => header !== undefined && header.key !== undefined && header.key !== "" && header.value !== undefined)
-          .forEach(header => headers[header.key] = header.value);
-      //处理body
-      let body = this.$store.state.ace.requestBodyEditor.getValue();
-      if (this.$store.state.ace.requestBodyMode === this.$store.state.ace.supportedLanguage.json) {
-        if (body !== undefined && body !== "") {
-          body = JSON.stringify(JSON.parse(body));
-        }
-      }
       //构造请求
       let curlArgs = {
         url: this.$store.state.curl.request.url,
         method: this.$store.state.curl.request.method,
-        headers: headers,
-        body: body,
+        headers: this.$store.getters.getRealTimeHeaders,
+        body: this.$store.getters.getRealTimeBody
       }
       //发送请求
       this.$store.commit('sendRequest', curlArgs)
@@ -129,19 +116,18 @@ export default {
     },
     //提取剪切板中的curl
     getCurlAndCopy: function () {
-      navigator.clipboard.readText().then((text)=>{
-        if(/^(https?:\/\/|curl)/.test(text))
-        {
+      navigator.clipboard.readText().then((text) => {
+        if (/^(https?:\/\/|curl)/.test(text)) {
           console.log('剪切板内容正常');
           this.$emit("parseCurl", text)
-        }else{
+        } else {
           ElMessage({
             message: '不支持的剪切板内容',
             type: 'error',
             duration: 500
           })
         }
-      }).catch(()=>{
+      }).catch(() => {
         ElMessage({
           message: '读取剪切板失败',
           type: 'error',
@@ -154,8 +140,8 @@ export default {
       const url = this.$store.state.curl.request.url;
       const options = {
         method: this.$store.state.curl.request.method,
-        headers: this.$store.state.curl.request.headers,
-        body: this.$store.state.curl.request.body
+        headers: this.$store.getters.getRealTimeHeaders,
+        body: this.$store.getters.getRealTimeBody
       };
       const curlStringOptions = {colorJson: false, jsonIndentWidth: 2}
       window.utools.copyText(curlString(url, options, curlStringOptions).trim())
@@ -183,7 +169,9 @@ export default {
         })
         return
       }
-      this.$store.state.curl.request.url = url.replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
+      this.$store.state.curl.request.url = url
+          .replace("https://", "http://")
+          .replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
     },
     //还原域名端口
     clickRevertDomain: function () {

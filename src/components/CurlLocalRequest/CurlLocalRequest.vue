@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  <el-card>-->
-    <Request @parseCurl="parseCurl"/>
+    <Request @parseCurl="parseAndSendCurl"/>
     <el-divider id="divider"/>
     <Response v-show="getResponseShow"/>
     <!--  </el-card>-->
@@ -12,7 +12,7 @@
 
 import Request from "@/components/CurlLocalRequest/request/Request";
 import Response from "@/components/CurlLocalRequest/response/Response";
-import CURLParser from "parse-curl";
+import Curl from "parse-curl";
 
 export default {
   name: 'CurlLocalRequest',
@@ -41,14 +41,14 @@ export default {
     isURL(s) {
       return /^https?:\/\//.test(s)
     },
-    parseCurl(curlStr)
-    {
+    parseAndSendCurl(curlStr) {
       this.$store.state.curl.curlText = curlStr
-      let curl = CURLParser(curlStr);
+      let curl = Curl.safeParse(curlStr);
       if (curl === undefined && this.isURL(curlStr)) {
         curl = {method: 'GET', url: curlStr, header: {}, body: ''};
       }
       console.log("curl:", curl)
+
       //初始化
       this.$store.commit('initByCurlText', curl);
 
@@ -67,7 +67,7 @@ export default {
   mounted() {
     window.utools.onPluginEnter(({code, type, payload}) => {
       console.log('用户进入插件', code, type, payload)
-      this.parseCurl(payload)
+      this.parseAndSendCurl(payload)
     });
   },
 
