@@ -76,7 +76,6 @@ export default createStore({
                 activeTabName: "responseResult"
             }
         }
-
     },
     mutations: {
         setCurlText(state, text) {
@@ -87,6 +86,15 @@ export default createStore({
                 return
             }
             state.curl.request.url = curl.url;
+          
+            const dbUrlMapping = window.utools.db.get("urlMapping");
+            const urlObject = window.newURL(curl.url);
+            const rawUrl = urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port)
+            if (dbUrlMapping && dbUrlMapping?.data?.[rawUrl]) {
+              state.curl.request.url = state.curl.request.url
+                  .replace("https://", "http://")
+                  .replace(rawUrl, dbUrlMapping?.data?.[rawUrl])
+            }
             state.curl.request.initUrl = curl.url
             state.curl.request.headers = curl.header
             state.curl.request.method = curl.method
@@ -170,9 +178,8 @@ export default createStore({
             this.commit('showResponseTab')
             state.ace.responseBodyEditor.setValue("", 1)
             state.ace.responseBodyEditor.getSession().setMode("ace/mode/json5")
-        },
-
-
+        }
+        
     },
     actions: {},
     getters: {
