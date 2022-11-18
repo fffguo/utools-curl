@@ -14,9 +14,25 @@ module.exports = defineConfig({
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from: './utools',
-                        to: './'
-                    },
+                        from: './utools/',
+                        to: './',
+                        //处理传输内容
+                        transform(content, absoluteFrom) {
+                            //plugin.json 替换属性
+                            if (absoluteFrom.endsWith("/plugin.json")) {
+                                let jsonContent = JSON.parse(content.toString());
+                                //替换
+                                let result = JSON.stringify(jsonContent, function (key, value) {
+                                    if (key === 'main') {
+                                        value = 'index.html';
+                                    }
+                                    return value;
+                                });
+                                return Buffer.from(result);
+                            }
+                            return content;
+                        },
+                    }
                 ]
             })
         ],
