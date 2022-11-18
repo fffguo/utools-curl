@@ -92,9 +92,13 @@ export default {
         this.url = this.$store.state.curl.request.url;
       }
     },
+    '$store.state.curl.request.initUrl'(value) {
+      if (value) {
+        this.refreshDomain(value)
+      }
+    }
   },
   methods: {
-
     //发送请求
     sendRequest: function () {
       //构造请求
@@ -169,9 +173,22 @@ export default {
         })
         return
       }
+     
       this.$store.state.curl.request.url = url
           .replace("https://", "http://")
           .replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
+
+      // 存储映射关系
+      const initUrlObject = window.newURL(this.$store.state.curl.request.initUrl)
+      const saveMappingUrl = initUrlObject.hostname + (initUrlObject.port === "" ? "" : ":" + initUrlObject.port);
+      const dbUrlMapping = window.utools.db.get("urlMapping");
+      const urlMapping = dbUrlMapping?.data ?? {}
+      urlMapping[saveMappingUrl] = domain;
+      window.utools.db.put({
+        _id: "urlMapping",
+        data: urlMapping,
+        _rev: dbUrlMapping?._rev
+      })
     },
     //还原域名端口
     clickRevertDomain: function () {
@@ -265,6 +282,15 @@ export default {
         this.replaceDomain = ""
       }
     },
+    refreshDomain(url) {
+      // 刷新domain
+      const urlObject = window.newURL(url);
+      const rawUrl = urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port)
+      const dbUrlMapping = window.utools.db.get("urlMapping");
+      if (dbUrlMapping?.data?.[rawUrl]) {
+        this.replaceDomain = dbUrlMapping?.data?.[rawUrl]
+      }
+    }
   }
 }
 </script>
