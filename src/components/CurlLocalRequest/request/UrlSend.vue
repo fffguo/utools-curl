@@ -173,7 +173,7 @@ export default {
         })
         return
       }
-     
+
       this.$store.state.curl.request.url = url
           .replace("https://", "http://")
           .replace(urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port), domain)
