@@ -287,6 +287,7 @@ export default {
       const urlObject = window.newURL(url);
       const rawUrl = urlObject.hostname + (urlObject.port === "" ? "" : ":" + urlObject.port)
       const dbUrlMapping = window.utools.db.get("urlMapping");
+      this.replaceDomain = "";
       if (dbUrlMapping?.data?.[rawUrl]) {
         this.replaceDomain = dbUrlMapping?.data?.[rawUrl]
       }
