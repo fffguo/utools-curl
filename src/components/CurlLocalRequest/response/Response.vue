@@ -9,17 +9,22 @@
     <el-tab-pane label="请求头部" name="requestHeader">
       <Header :headers="getRequestHeaders"/>
     </el-tab-pane>
+    <el-tab-pane label="HTML预览" name="responsePreview">
+      <ResponsePreview />
+    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import Header from '@/components/CurlLocalRequest/response/Header'
 import ResponseBody from '@/components/CurlLocalRequest/response/ResponseBody'
+import ResponsePreview from "@/components/CurlLocalRequest/response/ResponsePreview";
 
 export default {
 
   name: "ResponseComponent",
   components: {
+    ResponsePreview,
     Header,
     ResponseBody,
   },
