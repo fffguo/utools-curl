@@ -42,7 +42,7 @@ export default createStore({
                 body: ""
             },
             response: {
-                httpStatus: "",
+                httpStatus: "未知",
                 consumeTime: -1,
                 headers: [],
                 body: "",
@@ -58,7 +58,7 @@ export default createStore({
             responseBodyEditor: undefined,
             requestBodyEditor: undefined,
             requestBodyContentType: "JSON",
-            responseBodyContentType: "TEXT",
+            responseBodyContentType: "JSON",
             requestBodyMode: "ace/mode/json5",
         },
         //request dom节点

@@ -50,17 +50,6 @@ export default {
 
       //初始化
       this.$store.commit('initByCurlText', curl);
-
-      let curlArgs = {
-        url: this.$store.state.curl.request.url,
-        method: this.$store.state.curl.request.method,
-        headers: this.$store.state.curl.request.headers,
-        body: this.$store.state.curl.request.body
-      }
-      //发送
-      if (curl !== undefined) {
-        this.$store.commit('sendRequest', curlArgs);
-      }
     }
   },
   mounted() {
