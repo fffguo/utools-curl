@@ -1,6 +1,6 @@
 {
   "name": "utools-curl",
-  "version": "0.1.0",
+  "version": "1.9.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 9090",
