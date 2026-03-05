@@ -1,5 +1,9 @@
 {
-  "main": "http://127.0.0.1:9090",
+  "$schema": "utools.schema.json",
+  "development": {
+    "main": "http://localhost:5173"
+  },
+  "main": "index.html",
   "preload": "preload.js",
   "logo": "logo.png",
   "features": [

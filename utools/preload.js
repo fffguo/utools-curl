@@ -1,6 +1,17 @@
 const http = require('http');
 const https = require('https');
 require('url');
+
+// 缓存进入插件内容
+window.utools.onPluginEnter(({ code, type, payload }) => {
+    window.utools.dbStorage.setItem("__enterPayload", {
+        code: code,
+        type: type,
+        payload: payload
+    });
+})
+
+
 /*
 args 示例结构
 {
@@ -12,6 +23,25 @@ args 示例结构
 }
 callback参考：http://nodejs.cn/learn/the-nodejs-http-module#httpincomingmessage    http.IncomingMessage
 */
+// 从 rawHeaders 构建原始大小写的响应头对象
+function buildRawHeaders(rawHeaders) {
+    const headers = {};
+    for (let i = 0; i < rawHeaders.length; i += 2) {
+        const key = rawHeaders[i];
+        const value = rawHeaders[i + 1];
+        if (headers[key]) {
+            if (Array.isArray(headers[key])) {
+                headers[key].push(value);
+            } else {
+                headers[key] = [headers[key], value];
+            }
+        } else {
+            headers[key] = value;
+        }
+    }
+    return headers;
+}
+
 // eslint-disable-next-line no-undef
 sendRequest = function (curl, callback, errorCallback) {
     try {
@@ -35,7 +65,12 @@ sendRequest = function (curl, callback, errorCallback) {
             request.write(curl.body);
         }
         console.log("请求参数options：", options);
-        console.log("body：", curl.body);
+        // 当body过大时，只打印长度和部分内容
+        let bodyLog = curl.body;
+        if (bodyLog && bodyLog.length > 1000) {
+            bodyLog = `${bodyLog.substring(0, 200)}... (${bodyLog.length} 字符)`;
+        }
+        console.log("body：", bodyLog);
         request.on('error', errorCallback);
         request.end();
     } catch (e) {
@@ -45,7 +80,7 @@ sendRequest = function (curl, callback, errorCallback) {
 }
 
 let handleHeader = function (headers, body) {
-    if (body) {
+    if (body && headers) {
         headers['content-length'] = Buffer.byteLength(body)
     }
 };

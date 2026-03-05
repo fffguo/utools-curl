@@ -1,53 +1,39 @@
 {
   "name": "utools-curl",
-  "version": "1.9.2",
   "private": true,
+  "version": "2.0.0",
+  "type": "commonjs",
   "scripts": {
-    "serve": "vue-cli-service serve --port 9090",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "ace": "^1.3.0",
-    "core-js": "^3.8.3",
-    "curl-string": "git+https://github.com/zvakanaka/curl-string.git",
-    "element-plus": "^2.1.10",
-    "parse-curl": "git+https://github.com/fffguo/parse-curl.js.git",
-    "pretty-data": "^0.40.0",
-    "vue": "^3.2.13",
-    "vuex": "^4.0.2"
+    "@types/iconv-lite": "^0.0.1",
+    "@types/js-beautify": "^1.14.3",
+    "ace-builds": "^1.43.6",
+    "curlconverter": "^4.12.0",
+    "fetch-to-curl": "^0.6.0",
+    "iconv-lite": "^0.7.2",
+    "js-beautify": "^1.15.4",
+    "parse-curl": "^0.2.6",
+    "react": "^19.2.4",
+    "react-ace": "^14.0.1",
+    "react-dom": "^19.2.4",
+    "text-encoding-utf-8": "^1.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "^5.0.4",
-    "@vue/cli-plugin-eslint": "^5.0.4",
-    "@vue/cli-service": "^5.0.4",
-    "ace-builds": "^1.4.14",
-    "copy-webpack-plugin": "^11.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "unplugin-element-plus": "^0.4.0",
-    "utools-api-types": "^2.6.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "utools-api-types": "^7.5.1",
+    "vite": "^6.3.5",
+    "vite-plugin-static-copy": "^3.2.0"
+  }
 }
