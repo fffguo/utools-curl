@@ -54,6 +54,7 @@ sendRequest = function (curl, callback, errorCallback) {
             path: myURL.pathname + myURL.search,
             method: curl.method,
             headers: curl.headers,
+            rejectUnauthorized: false,
         };
         let request;
         if (curl.url.startsWith('https')) {
